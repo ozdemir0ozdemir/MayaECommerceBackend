@@ -1,7 +1,6 @@
 package ozdemir0ozdemir.mayaecommercebackend.controller;
 
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -58,7 +57,7 @@ record ProductController(ProductRepository productRepository,
     }
 
     @PutMapping("/{productId}")
-    ResponseEntity<?> updateExistingProduct(@PathVariable Long productId,
+    ResponseEntity<?> updateExistingProductById(@PathVariable Long productId,
                                             @RequestBody UpdateProductRequest request) {
 
         Optional<Product> optionalProduct = productRepository.findById(productId);
