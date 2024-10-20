@@ -20,6 +20,7 @@ doployment/docker-compose/infra.yml
 
 
 ## History
+- CrossOrigin annotation added to the product controller
 - MockMvc tests of Product and ProductCategory controllers implemented.
 - Taskfile.yml added to easily start,stop and restart infrastructure containers
 - Docker compose file added in /deployment/docker-compose to create a postgres container
@@ -36,6 +37,8 @@ doployment/docker-compose/infra.yml
 - global exception handler will be implemented
 - sql queries will be optimized creating projection classes and custom repository methods
 - sql transactions will be managed
+- model and entity validations will be implemented
+- HATEOAS will be implemented
 
 
 ## Refs

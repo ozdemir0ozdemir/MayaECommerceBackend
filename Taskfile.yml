@@ -15,3 +15,7 @@ tasks:
       - task: stop-infra
       - cmd: "timeout 5"
       - task: start-infra
+
+  start-backend:
+    cmds:
+      - "mvnw.cmd spring-boot:run"

@@ -19,6 +19,7 @@ import java.util.Optional;
 // Todo: implement a global exception handler
 @RestController
 @RequestMapping("/products")
+@CrossOrigin("http://localhost:4200")
 record ProductController(ProductRepository productRepository,
                          ProductCategoryRepository categoryRepository) {
 
