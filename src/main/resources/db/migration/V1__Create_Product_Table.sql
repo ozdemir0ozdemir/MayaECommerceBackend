@@ -14,7 +14,7 @@ create table products
     product_id          bigint         not null default nextval('products_id_seq'),
     sku                 varchar(255)   not null,
     name                varchar(255)   not null,
-    description         varchar(255)   not null,
+    description         text   not null,
     unit_price          decimal(13, 2) not null,
     image_url           varchar(255)   not null,
     active              boolean        not null,

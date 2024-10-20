@@ -31,14 +31,16 @@ doployment/docker-compose/infra.yml
 
 
 ## To be fixed
-- service layer will be added
-- custom response models will be implemented
-- custom exceptions will be added
-- global exception handler will be implemented
-- sql queries will be optimized creating projection classes and custom repository methods
-- sql transactions will be managed
-- model and entity validations will be implemented
-- HATEOAS will be implemented
+- Service layer
+- Pagination
+- Custom response models 
+- Custom exceptions 
+- Global exception handler 
+- SQL Query optimization by creating projection classes and custom repository methods
+- SQL Transactions management
+- Model and Entity VALIDATION
+- HATEOAS
+- Swagger OpenApi
 
 
 ## Refs

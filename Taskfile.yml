@@ -8,7 +8,6 @@ tasks:
   stop-infra:
     cmds:
       - "docker compose -f deployment/docker-compose/infra.yml down"
-      - "docker compose -f deployment/docker-compose/infra.yml rm -f"
 
   restart-infra:
     cmds:
