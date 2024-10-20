@@ -2,11 +2,13 @@ package ozdemir0ozdemir.mayaecommercebackend.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ozdemir0ozdemir.mayaecommercebackend.dao.ProductCategoryRepository;
 import ozdemir0ozdemir.mayaecommercebackend.entity.ProductCategory;
 import ozdemir0ozdemir.mayaecommercebackend.request.CreateProductCategoryRequest;
 import ozdemir0ozdemir.mayaecommercebackend.request.UpdateProductCategoryRequest;
 
+import java.net.URI;
 import java.util.Optional;
 
 @RestController
@@ -27,11 +29,22 @@ record ProductCategoryController(ProductCategoryRepository categoryRepository) {
 
     @PostMapping
     ResponseEntity<?> createNewProductCategory(@RequestBody CreateProductCategoryRequest request) {
-        return ResponseEntity.ok(categoryRepository.save(ProductCategory.of(request)));
+
+        ProductCategory savedCategory = categoryRepository.save(ProductCategory.of(request));
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{productCategoryId}")
+                .buildAndExpand(savedCategory.getProductCategoryId())
+                .toUri();
+
+        return ResponseEntity
+                .created(location)
+                .body(savedCategory);
     }
 
     @PutMapping("/{productCategoryId}")
-    ResponseEntity<?> updateProductCategory(@PathVariable Long productCategoryId,
+    ResponseEntity<?> updateProductCategoryById(@PathVariable Long productCategoryId,
                                             @RequestBody UpdateProductCategoryRequest request) {
 
         Optional<ProductCategory> optionalProductCategory =

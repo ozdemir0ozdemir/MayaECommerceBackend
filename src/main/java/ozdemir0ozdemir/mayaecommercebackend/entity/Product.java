@@ -18,8 +18,6 @@ import java.util.Date;
 @Table(name = "products")
 @Data
 @NoArgsConstructor
-@ToString
-@EqualsAndHashCode
 public class Product implements Serializable {
 
     @Id

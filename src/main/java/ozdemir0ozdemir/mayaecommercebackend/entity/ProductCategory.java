@@ -14,8 +14,7 @@ import java.util.Set;
 @Table(name = "products_categories")
 @Data
 @NoArgsConstructor
-@ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = "products")
 public class ProductCategory {
 
     @Id

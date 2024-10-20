@@ -1,5 +1,6 @@
 package ozdemir0ozdemir.mayaecommercebackend.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +41,8 @@ record ProductController(ProductRepository productRepository,
         Product product = Product.of(request);
 
         ProductCategory productCategory = categoryRepository
-                .getReferenceById(request.productCategoryId());
+                .findById(request.productCategoryId())
+                .orElseThrow(() -> new EntityNotFoundException("Product category is not found!"));
 
         product.setProductCategory(productCategory);
 
