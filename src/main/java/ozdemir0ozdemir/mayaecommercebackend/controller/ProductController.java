@@ -1,6 +1,7 @@
 package ozdemir0ozdemir.mayaecommercebackend.controller;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,29 +28,29 @@ record ProductController(ProductRepository productRepository,
 
 
     @GetMapping
-    ResponseEntity<List<Product>> getAllProducts(@RequestParam(name = "page", defaultValue = "1") Integer page,
+    ResponseEntity<Page<Product>> getAllProducts(@RequestParam(name = "page", defaultValue = "1") Integer page,
                                                  @RequestParam(name = "size", defaultValue = "20") Integer size) {
-        List<Product> products = productRepository
-                .findAll(PageRequest.of(page - 1, size)).toList();
+        Page<Product> products = productRepository
+                .findAll(PageRequest.of(Math.max(page - 1, 0), size));
         return ResponseEntity.ok(products);
     }
 
     @GetMapping("/category/{productCategoryId}")
-    ResponseEntity<List<Product>> getProductsByCategoryId(@PathVariable(name = "productCategoryId") Long productCategoryId,
+    ResponseEntity<Page<Product>> getProductsByCategoryId(@PathVariable(name = "productCategoryId") Long productCategoryId,
                                                           @RequestParam(name = "page", defaultValue = "1") Integer page,
                                                           @RequestParam(name = "size", defaultValue = "20") Integer size) {
 
-        List<Product> products = productRepository
-                .findByProductCategoryId(productCategoryId, PageRequest.of(page - 1, size)).toList();
+        Page<Product> products = productRepository
+                .findByProductCategoryId(productCategoryId, PageRequest.of(Math.max(page - 1, 0), size));
         return ResponseEntity.ok(products);
     }
 
     @GetMapping("/search")
-    ResponseEntity<List<Product>> getProductsByNameContaining(@RequestParam(name = "name") String name,
+    ResponseEntity<Page<Product>> getProductsByNameContaining(@RequestParam(name = "name") String name,
                                                               @RequestParam(name = "page", defaultValue = "1") Integer page,
                                                               @RequestParam(name = "size", defaultValue = "20") Integer size) {
-        List<Product> products = productRepository
-                .findByNameContaining(name, PageRequest.of(page - 1, size)).toList();
+        Page<Product> products = productRepository
+                .findByNameContaining(name, PageRequest.of(Math.max(page - 1, 0), size));
         return ResponseEntity.ok(products);
     }
 

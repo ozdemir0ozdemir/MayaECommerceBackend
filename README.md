@@ -33,6 +33,7 @@ doployment/docker-compose/infra.yml
 ## To be fixed
 - Service layer
 - Pagination
+- Add codeName to product category model for ui
 - Custom response models 
 - Custom exceptions 
 - Global exception handler 
