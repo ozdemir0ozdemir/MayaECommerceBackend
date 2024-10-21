@@ -40,7 +40,16 @@ record ProductController(ProductRepository productRepository,
                                                           @RequestParam(name = "size", defaultValue = "20") Integer size) {
 
         List<Product> products = productRepository
-                .findByProductCategoryId(productCategoryId ,PageRequest.of(page - 1, size)).toList();
+                .findByProductCategoryId(productCategoryId, PageRequest.of(page - 1, size)).toList();
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/search")
+    ResponseEntity<List<Product>> getProductsByNameContaining(@RequestParam(name = "name") String name,
+                                                              @RequestParam(name = "page", defaultValue = "1") Integer page,
+                                                              @RequestParam(name = "size", defaultValue = "20") Integer size) {
+        List<Product> products = productRepository
+                .findByNameContaining(name, PageRequest.of(page - 1, size)).toList();
         return ResponseEntity.ok(products);
     }
 
