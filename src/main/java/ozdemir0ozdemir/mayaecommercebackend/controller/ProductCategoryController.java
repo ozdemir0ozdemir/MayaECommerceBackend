@@ -1,5 +1,6 @@
 package ozdemir0ozdemir.mayaecommercebackend.controller;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -9,26 +10,29 @@ import ozdemir0ozdemir.mayaecommercebackend.request.CreateProductCategoryRequest
 import ozdemir0ozdemir.mayaecommercebackend.request.UpdateProductCategoryRequest;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/products/categories")
+@CrossOrigin(origins = {"${frontend.url}"})
 record ProductCategoryController(ProductCategoryRepository categoryRepository) {
     
     @GetMapping
-    ResponseEntity<?> getAllProductCategories() {
-        return ResponseEntity.ok(categoryRepository.findAll());
+    ResponseEntity<List<ProductCategory>> getAllProductCategories(@RequestParam(name = "page", defaultValue = "1") Integer page,
+                                                                  @RequestParam(name= "size", defaultValue = "20") Integer size) {
+        return ResponseEntity.ok(categoryRepository.findAll(PageRequest.of(page - 1, size)).toList());
     }
     
     @GetMapping("/{productCategoryId}")
-    ResponseEntity<?> getProductCategoryById(@PathVariable Long productCategoryId) {
+    ResponseEntity<ProductCategory> getProductCategoryById(@PathVariable Long productCategoryId) {
         return categoryRepository.findById(productCategoryId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    ResponseEntity<?> createNewProductCategory(@RequestBody CreateProductCategoryRequest request) {
+    ResponseEntity<ProductCategory> createNewProductCategory(@RequestBody CreateProductCategoryRequest request) {
 
         ProductCategory savedCategory = categoryRepository.save(ProductCategory.of(request));
 
@@ -44,7 +48,7 @@ record ProductCategoryController(ProductCategoryRepository categoryRepository) {
     }
 
     @PutMapping("/{productCategoryId}")
-    ResponseEntity<?> updateProductCategoryById(@PathVariable Long productCategoryId,
+    ResponseEntity<ProductCategory> updateProductCategoryById(@PathVariable Long productCategoryId,
                                             @RequestBody UpdateProductCategoryRequest request) {
 
         Optional<ProductCategory> optionalProductCategory =

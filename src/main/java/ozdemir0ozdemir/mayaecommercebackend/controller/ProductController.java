@@ -1,6 +1,7 @@
 package ozdemir0ozdemir.mayaecommercebackend.controller;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -11,6 +12,7 @@ import ozdemir0ozdemir.mayaecommercebackend.entity.ProductCategory;
 import ozdemir0ozdemir.mayaecommercebackend.request.CreateProductRequest;
 import ozdemir0ozdemir.mayaecommercebackend.request.UpdateProductRequest;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -19,25 +21,38 @@ import java.util.Optional;
 // Todo: implement a global exception handler
 @RestController
 @RequestMapping("/products")
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin(origins = {"${frontend.url}"})
 record ProductController(ProductRepository productRepository,
                          ProductCategoryRepository categoryRepository) {
 
 
     @GetMapping
-    ResponseEntity<?> getAllProducts() {
-        return ResponseEntity.ok(productRepository.findAll());
+    ResponseEntity<List<Product>> getAllProducts(@RequestParam(name = "page", defaultValue = "1") Integer page,
+                                                 @RequestParam(name = "size", defaultValue = "20") Integer size) {
+        List<Product> products = productRepository
+                .findAll(PageRequest.of(page - 1, size)).toList();
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/category/{productCategoryId}")
+    ResponseEntity<List<Product>> getProductsByCategoryId(@PathVariable(name = "productCategoryId") Long productCategoryId,
+                                                          @RequestParam(name = "page", defaultValue = "1") Integer page,
+                                                          @RequestParam(name = "size", defaultValue = "20") Integer size) {
+
+        List<Product> products = productRepository
+                .findByProductCategoryId(productCategoryId ,PageRequest.of(page - 1, size)).toList();
+        return ResponseEntity.ok(products);
     }
 
     @GetMapping("/{productId}")
-    ResponseEntity<?> getProductById(@PathVariable Long productId) {
+    ResponseEntity<Product> getProductById(@PathVariable Long productId) {
         return productRepository.findById(productId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    ResponseEntity<?> createNewProduct(@RequestBody CreateProductRequest request) {
+    ResponseEntity<Product> createNewProduct(@RequestBody CreateProductRequest request) {
         Product product = Product.of(request);
 
         ProductCategory productCategory = categoryRepository
@@ -58,8 +73,8 @@ record ProductController(ProductRepository productRepository,
     }
 
     @PutMapping("/{productId}")
-    ResponseEntity<?> updateExistingProductById(@PathVariable Long productId,
-                                            @RequestBody UpdateProductRequest request) {
+    ResponseEntity<Product> updateExistingProductById(@PathVariable Long productId,
+                                                      @RequestBody UpdateProductRequest request) {
 
         Optional<Product> optionalProduct = productRepository.findById(productId);
 
